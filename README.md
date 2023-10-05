@@ -48,7 +48,7 @@ Often, there is one DAO object per entity, and that DAO reads and writes a
 single file where each row contains information about one entity.
 
 DAOs have a method that returns an entity object. There is often a map of keys
-to entities, where the key is some kind of id.  When the main method creates a
+to entities, where the key is some kind of id.  When the view method creates a
 DAO, it injects any necessary entity factories.
 
 ### Use Case Interactors
@@ -64,7 +64,7 @@ comes from the user through the `View`.
 
 The state of the entities will often change as a result of a use case
 interaction: some may be created, some may be deleted, and some may be mutated. 
-`UseCaseInteractor`s use DAOs to get entities. When the main program creates an
+`UseCaseInteractor`s use DAOs to get entities. When the view program creates an
 interactor, it injects any necessary DAOs.
 
 If the `UseCaseInteractor` needs to look up data -- perhaps fetch a bank account
@@ -75,7 +75,7 @@ When the use case interaction is complete, the `UseCaseInteractor` will create
 an `OutputData` object containing any new information that should be represented
 in the `ViewModel`, and tells its `Presenter` object to update its `ViewModel`.
 
-When the main program instantiates a `UseCaseInteractor`, it injects a
+When the view program instantiates a `UseCaseInteractor`, it injects a
 `Presenter`.
 
 ### View
@@ -88,7 +88,7 @@ Most `View` objects have a corresponding `ViewModel` object in the
 `interface_adaptor` package. Each `View` will listen to its `ViewModel`, and
 react when it hears that there have been changes.
 
-When the main program creates a `View`, it injects the `ViewModel`.
+When the view program creates a `View`, it injects the `ViewModel`.
 
 When the user performs an action, perhaps clicking a button, it causes a call on
 an _action method_. When you create a button, you need to tell it to call an
@@ -96,7 +96,7 @@ an _action method_. When you create a button, you need to tell it to call an
 `actionPerformed` method. There are similar action methods for keystrokes and so on.
 
 Each `actionPerformed` method calls a method in a `Controller` object to trigger
-a use case interaction. When the main program builds the `View`, it injects any
+a use case interaction. When the view program builds the `View`, it injects any
 necessary `Controller`s.
 
 When an action method calls its `Controller` method, it passes in data the user
@@ -126,7 +126,7 @@ interaction.
 
 `Controller`s and `Presenter`s never use entities.
 
-When a `Controller` is instantiated, the main program injects a
+When a `Controller` is instantiated, the view program injects a
 `UseCaseInteractor` object.
 
 A `Presenter`'s job is to update its `ViewModel`, which will tell the `View`
@@ -142,9 +142,9 @@ To accomplish this, the `UseCaseInteractor` publishes a `DataAccessInterface`
 specifying the operations it needs to save and retrieve data. The DAO class
 implements this interface.
 
-Remember that the main program injects the `DAO` into the `UseCaseInteractor`.
+Remember that the view program injects the `DAO` into the `UseCaseInteractor`.
 To change how you're persisting data, you would write a new `DAO` class that also
-implements the `DataAccessInterface`, and then change the main program so that
+implements the `DataAccessInterface`, and then change the view program so that
 it injects that `DAO` instead.
 
 That's also why the `OutputBoundary` exists: if you want to change the user
